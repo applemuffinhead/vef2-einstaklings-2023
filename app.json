@@ -1,0 +1,43 @@
+{
+    "videos": [
+      {
+        "href": "/api/videos",
+        "type": "http",
+        "methods": ["GET"],
+        "authenticated": false
+      },
+      {
+        "href": "/api/videos/{id}",
+        "type": "http",
+        "methods": ["GET"],
+        "authenticated": false
+      },
+      {
+        "href": "/api/videos/upload",
+        "type": "http",
+        "methods": ["POST"],
+        "authenticated": true
+      },
+      {
+        "href": "/api/videos/{id}",
+        "type": "http",
+        "methods": ["PUT"],
+        "authenticated": true
+      },
+      {
+        "href": "/api/videos/{id}",
+        "type": "http",
+        "methods": ["DELETE"],
+        "authenticated": true
+      }
+    ],
+    "thumbnails": [
+      {
+        "href": "/api/thumbnails",
+        "type": "http",
+        "methods": ["GET"],
+        "authenticated": false
+      }
+    ]
+  }
+  
