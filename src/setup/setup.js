@@ -27,6 +27,17 @@ const setup = async () => {
       );
     `);
 
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS comments (
+        id SERIAL PRIMARY KEY,
+        video_id INTEGER NOT NULL,
+        author VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+      );
+    `);
+
     console.log('Tables created successfully');
     process.exit(0);
   } catch (err) {

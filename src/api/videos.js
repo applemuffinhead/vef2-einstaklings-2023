@@ -16,18 +16,39 @@ const pool = new Pool({
 // sækja öll myndbönd
 router.get("/", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM videos");
+    const { limit, offset } = req.query;
+    const result = await pool.query(
+      `SELECT id, title, description, url, thumbnail_url FROM videos
+       ORDER BY created_at DESC
+       LIMIT $1 OFFSET $2`,
+      [limit, offset]
+    );
     res.status(200).json(result.rows);
   } catch (err) {
     res.status(500).json({ message: "Error fetching videos", error: err });
   }
 });
 
+// sækjum countið
+router.get("/count", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT COUNT(*) FROM videos");
+    res.status(200).json({ totalCount: parseInt(result.rows[0].count) });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching video count", error: err });
+  }
+});
+
+
+
 // Sækja eitt myndband í einu
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query("SELECT * FROM videos WHERE id = $1", [id]);
+    const result = await pool.query(
+      "SELECT id, title, description, url, thumbnail_url FROM videos WHERE id = $1",
+      [id]
+    );
 
     if (result.rowCount === 0) {
       res.status(404).json({ message: "Video not found" });
@@ -38,7 +59,10 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Error fetching video", error: err });
   }
 });
-router.post("/upload", parser.single("video"), async (req, res) => {
+
+// nýtt myndband með thumbnail
+router.post("/upload", parser.single("file"), async (req, res) => {
+  console.log("Upload route called");
   if (!req.file) {
     res.status(400).json({ message: "No file uploaded" });
   } else {
@@ -83,8 +107,8 @@ router.post("/upload", parser.single("video"), async (req, res) => {
       const videoUrl = result.secure_url;
       console.log("videoUrl:", videoUrl); 
       const videoInsertResult = await pool.query(
-        "INSERT INTO videos (title, description, url) VALUES ($1, $2, $3) RETURNING *",
-        [title, description, videoUrl]
+        "INSERT INTO videos (title, description, url, thumbnail_url) VALUES ($1, $2, $3, $4) RETURNING *",
+        [title, description, videoUrl, thumbnailUrl]
       );
 
       const thumbnailInsertResult = await pool.query(

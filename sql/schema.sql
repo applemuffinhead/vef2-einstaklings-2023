@@ -13,3 +13,13 @@ CREATE TABLE public.thumbnails (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
 );
+
+CREATE TABLE public.comments (
+  id SERIAL PRIMARY KEY,
+  video_id INTEGER NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+);
+

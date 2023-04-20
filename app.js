@@ -6,6 +6,7 @@ const express = require("express");
 const app = express();
 const videosRouter = require("./src/api/videos");
 const thumbnailsRouter = require("./src/api/thumbnails");
+const commentRouter = require('./src/api/comments');
 const indexRouter = express.Router();
 const cors = require('./src/setup/cors');
 
@@ -39,4 +40,5 @@ app.listen(PORT, () => {
 
 app.use("/api/videos", videosRouter);
 app.use("/api/thumbnails", thumbnailsRouter);
+app.use('/api/videos/:id/comments', commentRouter);
 app.use("/", indexRouter);
