@@ -8,7 +8,7 @@ const videosRouter = require("./src/api/videos");
 const thumbnailsRouter = require("./src/api/thumbnails");
 const commentRouter = require('./src/api/comments');
 const indexRouter = express.Router();
-const cors = require('./src/setup/cors');
+const cors = require('cors');
 
 dotenv.config();
 
@@ -25,7 +25,7 @@ const pool = new Pool({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors);
+app.use(cors());
 
 
 indexRouter.get("/", async (req, res) => {

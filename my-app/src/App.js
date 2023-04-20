@@ -18,19 +18,24 @@ const App = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const API_URL =
+  process.env.REACT_APP_API_URL === "production"
+    ? "https://vef2-einstaklings-2023-production.up.railway.app/api"
+    : "http://localhost:4000/api";
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
 
-      const countResponse = await fetch(
-        `http://localhost:4000/api/videos/count`
-      );
+      const countResponse = await fetch(`${API_URL}/videos/count`);
       const countData = await countResponse.json();
       console.log("Total count data:", countData);
       setTotalCount(countData.totalCount);
 
       const videosResponse = await fetch(
-        `http://localhost:4000/api/videos?limit=${countData.totalCount}&offset=0`
+        `${API_URL}/videos?limit=${countData.totalCount}&offset=0`
       );
       const videosData = await videosResponse.json();
       console.log("Received data:", videosData);
@@ -40,7 +45,7 @@ const App = () => {
     };
 
     fetchData();
-  }, []);
+  }, [API_URL]);
 
   return (
     <div>
