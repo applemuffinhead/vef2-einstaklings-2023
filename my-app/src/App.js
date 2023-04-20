@@ -18,12 +18,7 @@ const App = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const API_URL =
-  process.env.REACT_APP_API_URL === "production"
-    ? "https://vef2-einstaklings-2023-production.up.railway.app/api"
-    : "http://localhost:4000/api";
-
-
+  const API_URL = "https://vef2-einstaklings-2023-production.up.railway.app/api";
 
   useEffect(() => {
     const fetchData = async () => {
