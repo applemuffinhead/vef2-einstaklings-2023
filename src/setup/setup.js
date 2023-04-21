@@ -14,17 +14,8 @@ const setup = async () => {
         title VARCHAR(255) NOT NULL,
         description TEXT,
         url VARCHAR(255) NOT NULL,
+        thumbnail_url VARCHAR(255),
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS thumbnails (
-        id SERIAL PRIMARY KEY,
-        video_id INTEGER NOT NULL,
-        url VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-        FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
       );
     `);
 

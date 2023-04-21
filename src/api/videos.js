@@ -112,25 +112,18 @@ router.post("/upload", parser.single("file"), async (req, res) => {
       console.log("videoUrl:", videoUrl);
       console.log("thumbnailUrl:", thumbnailUrl);
 
-      try {
-        const videoInsertResult = await pool.query(
-          "INSERT INTO videos (title, description, url, thumbnail_url, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
-          [title, description, videoUrl, thumbnailUrl]
-        );
-        console.log("videoInsertResult:", videoInsertResult);
-      } catch (err) {
-        console.error("Error executing video insert query:", err);
-      }
+      const videoInsertResult = await pool.query(
+        "INSERT INTO videos (title, description, url, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *",
+        [title, description, videoUrl]
+      );
+      console.log("videoInsertResult:", videoInsertResult);
 
-      try {
-        const thumbnailInsertResult = await pool.query(
-          "INSERT INTO thumbnails (video_id, url, created_at) VALUES ($1, $2, NOW()) RETURNING *",
-          [videoInsertResult.rows[0].id, thumbnailUrl]
-        );
-        console.log("thumbnailInsertResult:", thumbnailInsertResult);
-      } catch (err) {
-        console.error("Error executing thumbnail insert query:", err);
-      }
+      const videoId = videoInsertResult.rows[0].id;
+      const thumbnailInsertResult = await pool.query(
+        "INSERT INTO thumbnails (video_id, url, created_at) VALUES ($1, $2, NOW()) RETURNING *",
+        [videoId, thumbnailUrl]
+      );
+      console.log("thumbnailInsertResult:", thumbnailInsertResult);
 
       res.status(201).json({
         message: "Video uploaded successfully",
@@ -143,26 +136,35 @@ router.post("/upload", parser.single("file"), async (req, res) => {
   }
 });
 
-// Breytum myndbandi
+
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { title, description, url, thumbnail_url } = req.body;
 
   try {
-    const result = await pool.query(
-      "UPDATE videos SET title = $1, description = $2, url = $3, thumbnail_url = $4 WHERE id = $5 RETURNING *",
-      [title, description, url, thumbnail_url, id]
+    const videoUpdateResult = await pool.query(
+      "UPDATE videos SET title = $1, description = $2, url = $3 WHERE id = $4 RETURNING *",
+      [title, description, url, id]
     );
 
-    if (result.rowCount === 0) {
+    if (videoUpdateResult.rowCount === 0) {
       res.status(404).json({ message: "Video not found" });
     } else {
-      res.status(200).json(result.rows[0]);
+      const thumbnailUpdateResult = await pool.query(
+        "UPDATE thumbnails SET url = $1 WHERE video_id = $2 RETURNING *",
+        [thumbnail_url, id]
+      );
+
+      res.status(200).json({
+        ...videoUpdateResult.rows[0],
+        thumbnail_url: thumbnailUpdateResult.rows[0].url,
+      });
     }
   } catch (err) {
     res.status(500).json({ message: "Error updating video", error: err });
   }
 });
+
 
 // Eyðum myndbandi
 router.delete("/:id", async (req, res) => {
