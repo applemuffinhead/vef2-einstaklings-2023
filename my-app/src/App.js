@@ -9,6 +9,7 @@ import "./styles/SearchBar.css";
 import "./styles/Home.css";
 import "./styles/Footer.css";
 import "./styles/Header.css";
+import "./styles/VideoUpload.css"
 
 const App = () => {
   const [videos, setVideos] = useState([]);
