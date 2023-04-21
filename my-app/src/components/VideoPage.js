@@ -79,6 +79,7 @@ const VideoPage = () => {
       ) : (
         <div className="video-wrapper">
           <h1 className="videoTitle">{video.title}</h1>
+          <p className="videoDescription">{video.description}</p>
           <div className="video-comments-wrapper">
             <div className="video-container">
               <video
@@ -122,7 +123,6 @@ const VideoPage = () => {
               )}
             </div>
           </div>
-          <p className="videoDescription">{video.description}</p>
         </div>
       )}
     </div>
