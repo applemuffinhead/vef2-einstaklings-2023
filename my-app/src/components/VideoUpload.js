@@ -40,7 +40,7 @@ const VideoUpload = () => {
   return (
     <div className="upload-container">
       <div className="upload-form">
-        <h1>Upload a new video</h1>
+        <h2>Upload a new video</h2>
         <form onSubmit={handleSubmit}>
           <label>
             <span>Title:</span>
