@@ -22,8 +22,11 @@ const VideoPage = () => {
     }).format(date);
   };
 
+  const API_URL =
+    "https://vef2-einstaklings-2023-production.up.railway.app/api";
+
   useEffect(() => {
-    fetch(`http://localhost:4000/api/videos/${id}`)
+    fetch(`${API_URL}/videos/${id}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -31,7 +34,7 @@ const VideoPage = () => {
         setLoading(false);
       });
 
-    fetch(`http://localhost:4000/api/videos/${id}/comments`)
+    fetch(`${API_URL}/videos/${id}/comments`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -42,7 +45,7 @@ const VideoPage = () => {
   const handleCommentSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:4000/api/videos/${id}/comments`, {
+    fetch(`${API_URL}/videos/${id}/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
