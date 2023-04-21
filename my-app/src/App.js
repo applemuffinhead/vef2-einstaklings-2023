@@ -29,7 +29,6 @@ const App = () => {
       console.log("Total count data:", countData);
       setTotalCount(countData.totalCount);
     
-      // Add this condition to handle the case when totalCount is 0
       if (countData.totalCount === 0) {
         setLoading(false);
         return;
@@ -44,7 +43,7 @@ const App = () => {
     
       setLoading(false);
     };
-    
+
 
     fetchData();
   }, [API_URL]);

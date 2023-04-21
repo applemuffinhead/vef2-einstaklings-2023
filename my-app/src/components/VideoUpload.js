@@ -12,26 +12,29 @@ const VideoUpload = () => {
     setFile(e.target.files[0]);
   };
 
+  const API_URL = "https://vef2-einstaklings-2023-production.up.railway.app/api";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     setLoading(true);
-
+  
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     formData.append('file', file);
-
-    await fetch('http://localhost:4000/api/videos/upload', {
+  
+    await fetch(`${API_URL}/videos/upload`, {
       method: 'POST',
       body: formData,
     });
-
+  
     setLoading(false);
-
+  
     navigate('/');
     window.location.reload();
   };
+  
 
   return (
     <div>
