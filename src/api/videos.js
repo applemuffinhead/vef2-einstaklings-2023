@@ -111,16 +111,20 @@ router.post("/upload", parser.single("file"), async (req, res) => {
       console.log("description:", description);
       console.log("videoUrl:", videoUrl);
       console.log("thumbnailUrl:", thumbnailUrl);
-
+      console.log("videoInsertResult:", videoInsertResult);
+      console.log("thumbnailInsertResult:", thumbnailInsertResult);
+      
       const videoInsertResult = await pool.query(
         "INSERT INTO videos (title, description, url, thumbnail_url, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
         [title, description, videoUrl, thumbnailUrl]
       );
+      console.log("videoInsertResult:", videoInsertResult);
 
       const thumbnailInsertResult = await pool.query(
         "INSERT INTO thumbnails (video_id, url, created_at) VALUES ($1, $2, NOW()) RETURNING *",
         [videoInsertResult.rows[0].id, thumbnailUrl]
       );
+      console.log("thumbnailInsertResult:", thumbnailInsertResult);
 
       res.status(201).json({
         message: "Video uploaded successfully",
