@@ -18,10 +18,10 @@ router.get("/", async (req, res) => {
   try {
     const { limit, offset } = req.query;
     const result = await pool.query(
-      `SELECT v.id, v.title, v.description, v.url, t.url AS thumbnail_url FROM videos v
-       LEFT JOIN thumbnails t ON v.id = t.video_id
-       ORDER BY v.created_at DESC
-       LIMIT $1 OFFSET $2`,
+      `SELECT v.id, v.title, v.description, v.url, v.thumbnail_url, t.url AS thumbnail_url FROM videos v
+      LEFT JOIN thumbnails t ON v.id = t.video_id
+      ORDER BY v.created_at DESC
+      LIMIT $1 OFFSET $2`,
       [limit, offset]
     );
     res.status(200).json(result.rows);
