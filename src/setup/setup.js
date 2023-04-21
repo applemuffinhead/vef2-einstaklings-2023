@@ -1,9 +1,9 @@
-const { Pool } = require('pg');
-const dotenv = require('dotenv');
+const { Pool } = require("pg");
+const dotenv = require("dotenv");
 dotenv.config();
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
 });
 
 const setup = async () => {
@@ -23,6 +23,7 @@ const setup = async () => {
         id SERIAL PRIMARY KEY,
         video_id INTEGER NOT NULL,
         url VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
       );
     `);
@@ -38,10 +39,10 @@ const setup = async () => {
       );
     `);
 
-    console.log('Tables created successfully');
+    console.log("Tables created successfully");
     process.exit(0);
   } catch (err) {
-    console.error('Error creating tables:', err);
+    console.error("Error creating tables:", err);
     process.exit(1);
   }
 };
