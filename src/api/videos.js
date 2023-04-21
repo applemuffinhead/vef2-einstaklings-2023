@@ -30,7 +30,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 // sækjum countið
 router.get("/count", async (req, res) => {
   try {
@@ -40,8 +39,6 @@ router.get("/count", async (req, res) => {
     res.status(500).json({ message: "Error fetching video count", error: err });
   }
 });
-
-
 
 // Sækja eitt myndband í einu
 router.get("/:id", async (req, res) => {
@@ -98,23 +95,23 @@ router.post("/upload", parser.single("file"), async (req, res) => {
         format: "jpg",
         quality: "auto",
       };
-      
-      const thumbnailUrl = result.secure_url.replace(
-        "/upload/",
-        `/upload/c_fill,h_${thumbnailOptions.height},q_auto,w_${thumbnailOptions.width}/`
-      ).replace(".mp4", ".jpg");
-      
-      
+
+      const thumbnailUrl = result.secure_url
+        .replace(
+          "/upload/",
+          `/upload/c_fill,h_${thumbnailOptions.height},q_auto,w_${thumbnailOptions.width}/`
+        )
+        .replace(".mp4", ".jpg");
 
       const videoUrl = result.secure_url;
-      console.log("videoUrl:", videoUrl); 
+      console.log("videoUrl:", videoUrl);
       const videoInsertResult = await pool.query(
-        "INSERT INTO videos (title, description, url, thumbnail_url) VALUES ($1, $2, $3, $4) RETURNING *",
+        "INSERT INTO videos (title, description, url, thumbnail_url, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
         [title, description, videoUrl, thumbnailUrl]
       );
 
       const thumbnailInsertResult = await pool.query(
-        "INSERT INTO thumbnails (video_id, url) VALUES ($1, $2) RETURNING *",
+        "INSERT INTO thumbnails (video_id, url, created_at) VALUES ($1, $2, NOW()) RETURNING *",
         [videoInsertResult.rows[0].id, thumbnailUrl]
       );
 
@@ -149,7 +146,6 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Error updating video", error: err });
   }
 });
-
 
 // Eyðum myndbandi
 router.delete("/:id", async (req, res) => {
