@@ -1,7 +1,7 @@
-[[deploy]]
-type = "frontend"
-name = "frontend"
-main = "my-app"
+[frontend]
+name = "my-app"
+command = "npm start"
+output = "build"
 
 [build]
 command = "npm run build"
