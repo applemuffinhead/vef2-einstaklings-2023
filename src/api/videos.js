@@ -143,28 +143,20 @@ router.put("/:id", async (req, res) => {
 
   try {
     const videoUpdateResult = await pool.query(
-      "UPDATE videos SET title = $1, description = $2, url = $3 WHERE id = $4 RETURNING *",
-      [title, description, url, id]
+      "UPDATE videos SET title = $1, description = $2, url = $3, thumbnail_url = $4 WHERE id = $5 RETURNING *",
+      [title, description, url, thumbnail_url, id]
     );
 
     if (videoUpdateResult.rowCount === 0) {
       res.status(404).json({ message: "Video not found" });
     } else {
-      const thumbnailUpdateResult = await pool.query(
-        "UPDATE thumbnails SET url = $1 WHERE video_id = $2 RETURNING *",
-        [thumbnail_url, id]
-      );
-
-      res.status(200).json({
-        ...videoUpdateResult.rows[0],
-        thumbnail_url: thumbnailUpdateResult.rowCount > 0 ? thumbnailUpdateResult.rows[0].url : null,
-      });
+      res.status(200).json(videoUpdateResult.rows[0]);
     }
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Error updating video", error: err });
   }
 });
+
 
 
 
