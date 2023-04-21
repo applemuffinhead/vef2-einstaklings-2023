@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './VideoUpload.css';
+import '../styles/VideoUpload.css';
 
 const VideoUpload = () => {
   const [title, setTitle] = useState('');
