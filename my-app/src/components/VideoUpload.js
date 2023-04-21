@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/VideoUpload.css';
+import { Link } from 'react-router-dom';
 
 const VideoUpload = () => {
   const [title, setTitle] = useState('');
@@ -39,6 +40,9 @@ const VideoUpload = () => {
 
   return (
     <div className="upload-container">
+      <Link to="/" className="back-button">
+        &larr; Back
+      </Link>
       <div className="upload-form">
         <h2>Upload a new video</h2>
         <form onSubmit={handleSubmit}>
