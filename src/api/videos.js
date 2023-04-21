@@ -17,18 +17,27 @@ const pool = new Pool({
 router.get("/", async (req, res) => {
   try {
     const { limit, offset } = req.query;
+    const parsedLimit = parseInt(limit, 10);
+    const parsedOffset = parseInt(offset, 10);
+
+    if (isNaN(parsedLimit) || isNaN(parsedOffset)) {
+      res.status(400).json({ message: "Invalid query parameters" });
+      return;
+    }
+
     const result = await pool.query(
       `SELECT v.id, v.title, v.description, v.url, t.url AS thumbnail_url FROM videos v
        LEFT JOIN thumbnails t ON v.id = t.video_id
        ORDER BY v.created_at DESC
        LIMIT $1 OFFSET $2`,
-      [limit, offset]
+      [parsedLimit, parsedOffset]
     );
     res.status(200).json(result.rows);
   } catch (err) {
     res.status(500).json({ message: "Error fetching videos", error: err });
   }
 });
+
 
 // sækjum countið
 router.get("/count", async (req, res) => {
