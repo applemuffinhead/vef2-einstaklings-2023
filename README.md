@@ -39,6 +39,9 @@ Og hér er að finna bakendan:
 
 https://vef2-einstaklings-2023-production.up.railway.app/
 
+## Athuga
+Það tekur smá tíma fyrir myndband að verða til. Maður þarf að hinkra aðeins eftir því.
+
 
 
 
