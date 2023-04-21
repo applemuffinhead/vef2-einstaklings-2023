@@ -157,7 +157,7 @@ router.put("/:id", async (req, res) => {
 
       res.status(200).json({
         ...videoUpdateResult.rows[0],
-        thumbnail_url: thumbnailUpdateResult.rows[0].url,
+        thumbnail_url: thumbnailUpdateResult.rowCount > 0 ? thumbnailUpdateResult.rows[0].url : null,
       });
     }
   } catch (err) {
@@ -165,6 +165,7 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Error updating video", error: err });
   }
 });
+
 
 
 // Eyðum myndbandi
