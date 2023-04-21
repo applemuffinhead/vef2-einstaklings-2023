@@ -112,17 +112,25 @@ router.post("/upload", parser.single("file"), async (req, res) => {
       console.log("videoUrl:", videoUrl);
       console.log("thumbnailUrl:", thumbnailUrl);
 
-      const videoInsertResult = await pool.query(
-        "INSERT INTO videos (title, description, url, thumbnail_url, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
-        [title, description, videoUrl, thumbnailUrl]
-      );
-      console.log("videoInsertResult:", videoInsertResult);
+      try {
+        const videoInsertResult = await pool.query(
+          "INSERT INTO videos (title, description, url, thumbnail_url, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
+          [title, description, videoUrl, thumbnailUrl]
+        );
+        console.log("videoInsertResult:", videoInsertResult);
+      } catch (err) {
+        console.error("Error executing video insert query:", err);
+      }
 
-      const thumbnailInsertResult = await pool.query(
-        "INSERT INTO thumbnails (video_id, url, created_at) VALUES ($1, $2, NOW()) RETURNING *",
-        [videoInsertResult.rows[0].id, thumbnailUrl]
-      );
-      console.log("thumbnailInsertResult:", thumbnailInsertResult);
+      try {
+        const thumbnailInsertResult = await pool.query(
+          "INSERT INTO thumbnails (video_id, url, created_at) VALUES ($1, $2, NOW()) RETURNING *",
+          [videoInsertResult.rows[0].id, thumbnailUrl]
+        );
+        console.log("thumbnailInsertResult:", thumbnailInsertResult);
+      } catch (err) {
+        console.error("Error executing thumbnail insert query:", err);
+      }
 
       res.status(201).json({
         message: "Video uploaded successfully",
