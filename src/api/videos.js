@@ -113,9 +113,9 @@ router.post("/upload", parser.single("file"), async (req, res) => {
       console.log("thumbnailUrl:", thumbnailUrl);
 
       const videoInsertResult = await pool.query(
-        "INSERT INTO videos (title, description, url, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *",
-        [title, description, videoUrl]
-      );
+        "INSERT INTO videos (title, description, url, thumbnail_url, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
+        [title, description, videoUrl, thumbnailUrl]
+      );      
       console.log("videoInsertResult:", videoInsertResult);
 
       const videoId = videoInsertResult.rows[0].id;
