@@ -45,7 +45,9 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      "SELECT id, title, description, url, thumbnail_url FROM videos WHERE id = $1",
+      `SELECT v.id, v.title, v.description, v.url, t.url AS thumbnail_url FROM videos v
+       LEFT JOIN thumbnails t ON v.id = t.video_id
+       WHERE v.id = $1`,
       [id]
     );
 
@@ -58,6 +60,7 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Error fetching video", error: err });
   }
 });
+
 
 // nýtt myndband með thumbnail
 router.post("/upload", parser.single("file"), async (req, res) => {
