@@ -36,8 +36,8 @@ const App = () => {
       }
     
       const videosResponse = await fetch(
-        `${API_URL}/videos?limit=${countData.totalCount}&offset=0`
-      );
+        `${API_URL}/videos?limit=${parseInt(countData.totalCount)}&offset=0`
+      );      
       const videosData = await videosResponse.json();
       console.log("Received data:", videosData);
       setVideos(videosData);
