@@ -23,21 +23,28 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-
+    
       const countResponse = await fetch(`${API_URL}/videos/count`);
       const countData = await countResponse.json();
       console.log("Total count data:", countData);
       setTotalCount(countData.totalCount);
-
+    
+      // Add this condition to handle the case when totalCount is 0
+      if (countData.totalCount === 0) {
+        setLoading(false);
+        return;
+      }
+    
       const videosResponse = await fetch(
         `${API_URL}/videos?limit=${countData.totalCount}&offset=0`
       );
       const videosData = await videosResponse.json();
       console.log("Received data:", videosData);
       setVideos(videosData);
-
+    
       setLoading(false);
     };
+    
 
     fetchData();
   }, [API_URL]);
