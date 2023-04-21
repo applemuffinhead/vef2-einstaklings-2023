@@ -18,8 +18,7 @@ router.get("/", async (req, res) => {
   try {
     const { limit, offset } = req.query;
     const result = await pool.query(
-      `SELECT v.id, v.title, v.description, v.url, t.url AS thumbnail_url FROM videos v
-       LEFT JOIN thumbnails t ON v.id = t.video_id
+      `SELECT v.id, v.title, v.description, v.url, v.thumbnail_url FROM videos v
        ORDER BY v.created_at DESC
        LIMIT $1 OFFSET $2`,
       [limit, offset]
@@ -29,6 +28,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Error fetching videos", error: err });
   }
 });
+
 
 // sækjum countið
 router.get("/count", async (req, res) => {
@@ -45,8 +45,7 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      `SELECT v.id, v.title, v.description, v.url, t.url AS thumbnail_url FROM videos v
-       LEFT JOIN thumbnails t ON v.id = t.video_id
+      `SELECT v.id, v.title, v.description, v.url, v.thumbnail_url FROM videos v
        WHERE v.id = $1`,
       [id]
     );
@@ -60,6 +59,7 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Error fetching video", error: err });
   }
 });
+
 
 // nýtt myndband með thumbnail
 router.post("/upload", parser.single("file"), async (req, res) => {
