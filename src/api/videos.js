@@ -17,27 +17,18 @@ const pool = new Pool({
 router.get("/", async (req, res) => {
   try {
     const { limit, offset } = req.query;
-    const parsedLimit = parseInt(limit, 10);
-    const parsedOffset = parseInt(offset, 10);
-
-    if (isNaN(parsedLimit) || isNaN(parsedOffset)) {
-      res.status(400).json({ message: "Invalid query parameters" });
-      return;
-    }
-
     const result = await pool.query(
       `SELECT v.id, v.title, v.description, v.url, t.url AS thumbnail_url FROM videos v
        LEFT JOIN thumbnails t ON v.id = t.video_id
        ORDER BY v.created_at DESC
        LIMIT $1 OFFSET $2`,
-      [parsedLimit, parsedOffset]
+      [limit, offset]
     );
     res.status(200).json(result.rows);
   } catch (err) {
     res.status(500).json({ message: "Error fetching videos", error: err });
   }
 });
-
 
 // sækjum countið
 router.get("/count", async (req, res) => {
@@ -69,7 +60,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Error fetching video", error: err });
   }
 });
-
 
 // nýtt myndband með thumbnail
 router.post("/upload", parser.single("file"), async (req, res) => {
@@ -117,6 +107,11 @@ router.post("/upload", parser.single("file"), async (req, res) => {
 
       const videoUrl = result.secure_url;
       console.log("videoUrl:", videoUrl);
+      console.log("title:", title);
+      console.log("description:", description);
+      console.log("videoUrl:", videoUrl);
+      console.log("thumbnailUrl:", thumbnailUrl);
+
       const videoInsertResult = await pool.query(
         "INSERT INTO videos (title, description, url, thumbnail_url, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *",
         [title, description, videoUrl, thumbnailUrl]
