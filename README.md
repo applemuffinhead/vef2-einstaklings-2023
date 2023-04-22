@@ -4,7 +4,7 @@
 Hrefna Karen Valgarðsdóttir: hkv5@hi.is
 
 ## Skýrsla:
-Er að finna í pdf formi og læt fylgja með.
+Er að finna í pdf formi og læt fylgja með í /vef2-skyrsla folder hér að ofan
 
 ## Til þess að keyra verkefni:
 ### Bakendi
